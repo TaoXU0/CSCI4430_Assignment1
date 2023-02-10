@@ -27,10 +27,20 @@ int client(char* hostname, int port, int time){
         exit(-1);
     }
     printf("Connect to the server\n");
-
+    unsigned long byte_num = 0;
     // keep sending 1000 bytes
     char msg[1000];
     memset(msg, '0', 1000);
+    clock_t start_time,finish_time;
+    start_time = clock();
+    while(true){
+        send(client_socket_fd, &msg, strlen(msg), MSG_NOSIGNAL);
+        finish_time = clock();
+        byte_num += strlen(msg);
+        if((double)(finish_time - start_time) / CLOCKS_PER_SEC > 10.0){
+            break;
+        }
+    }
     send(client_socket_fd, &msg, strlen(msg), MSG_NOSIGNAL);
     printf("Finished sending data\n");
 
@@ -42,6 +52,12 @@ int client(char* hostname, int port, int time){
     // wait for acknowledgement
     char acknowledgement[20] = "";
     recv(client_socket_fd, &acknowledgement, 16, MSG_NOSIGNAL);
+
+    // close socket
+    byte_num /= 1000;
+    double speed = byte_num / ((double)(finish_time - start_time) / CLOCKS_PER_SEC) / 1000 * 8;
+    printf("Sent=%lu KB, Rate=%.3f Mbps", byte_num, speed);
+    close(client_socket_fd);
     return 0;
 
 
@@ -67,13 +83,20 @@ int server(int listen_port){
     int conn = accept(server_socket_fd, (struct sockaddr *) &addr, &addr_len);
     printf("Accepted the client.\n");
     // receive data
-    int count = 0;
+    unsigned long count = 0;
+    time_t start_time, end_time;
+    int flag = 0;
     while(1){
         char buffer[1001] = "";
         int byte_recved = recv(conn, &buffer, 1000, MSG_NOSIGNAL);
+        if(flag == 0){
+            start_time = clock();
+            flag = 1
+        }
         printf("%s\n", buffer);
         if(strcmp(buffer, "Finished") == 0){
             break;
+            end_time = clock();
         }
         count += byte_recved;
         printf("%d\n", count);
@@ -83,7 +106,10 @@ int server(int listen_port){
     // send acknowledgement message
     char* acknow_message = "Acknowledgement";
     send(server_socket_fd, acknow_message, strlen(acknow_message), MSG_NOSIGNAL);
-    while
+    count /= 1000;
+    double speed = byte_num / ((double)(finish_time - start_time) / CLOCKS_PER_SEC) / 1000 * 8;
+    printf("Received=%lu KB, Rate=%.3f Mbps", count, speed);
+    close(server_socket_fd);
     return 0;
 }
 
