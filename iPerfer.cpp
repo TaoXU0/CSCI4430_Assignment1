@@ -86,14 +86,10 @@ int server(int listen_port){
     // receive data
     unsigned long count = 0;
     unsigned long start_time, end_time;
-    int flag = 0;
+    start_time = clock();
     while(true){
         char buffer[1001] = "";
         int byte_recved = recv(conn, &buffer, 1000, MSG_NOSIGNAL);
-        if(flag == 0){
-            start_time = clock();
-            flag = 1;
-        }
         if(strcmp(buffer, "Finished") == 0){
             end_time = clock();
             break;
