@@ -45,7 +45,7 @@ int client(char* hostname, int port, int time){
         printf("%lu\n",CLOCKS_PER_SEC);
         byte_num += strlen(msg);
     }
-    send(client_socket_fd, &msg, strlen(msg), MSG_NOSIGNAL);
+
     printf("Finished sending data\n");
 
     // send Fin message
@@ -92,7 +92,7 @@ int server(int listen_port){
     int flag = 0;
     while(true){
         char buffer[1001] = "";
-        int byte_recved = recv(conn, &buffer, 1000, MSG_NOSIGNAL);
+        int byte_recved = recv(conn, &buffer, 100000, MSG_NOSIGNAL);
         if(flag == 0){
             start_time = clock();
             flag = 1;
