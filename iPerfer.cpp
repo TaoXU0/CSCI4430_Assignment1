@@ -31,16 +31,16 @@ int client(char* hostname, int port, int time){
     // keep sending 1000 bytes
     char msg[1000];
     memset(msg, '0', 1000);
-    unsigned long start_time,finish_time;
+    clock_t start_time,finish_time;
     start_time = clock();
     while(true){
-        send(client_socket_fd, &msg, strlen(msg), MSG_NOSIGNAL);
         finish_time = clock();
-        byte_num += strlen(msg);
-        break;
-        if(((double)(finish_time - start_time) / CLOCKS_PER_SEC) >= double(time)){
+        if(((double)(finish_time - start_time) / CLOCKS_PER_SEC) >= double(time)) {
             break;
         }
+        send(client_socket_fd, &msg, strlen(msg), MSG_NOSIGNAL);
+        printf("%lu\n",CLOCKS_PER_SEC);
+        byte_num += strlen(msg);
     }
     send(client_socket_fd, &msg, strlen(msg), MSG_NOSIGNAL);
     printf("Finished sending data\n");
@@ -94,14 +94,14 @@ int server(int listen_port){
             start_time = clock();
             flag = 1;
         }
-        printf("%s\n", buffer);
         if(strcmp(buffer, "Finished") == 0){
             end_time = clock();
             break;
         }
-        count += byte_recved;
-        printf("%lu\n", count);
-
+        if(byte_recved == 1000){
+            count += byte_recved;
+            printf("%lu\n", count);
+        }
     }
 
     // send acknowledgement message
