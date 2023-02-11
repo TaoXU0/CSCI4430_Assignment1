@@ -131,7 +131,7 @@ int main(int argc, char* argv[]){
             return 1;
         }
         int time = atoi(argv[7]);
-        if(time < 0){
+        if(time <= 0){
             printf("Error: time argument must be greater than 0\n");
             return 1;
         }
