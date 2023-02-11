@@ -57,7 +57,7 @@ int client(char* hostname, int port, int time){
     // close socket
     byte_num /= 1000;
     double speed = byte_num / ((double)(finish_time - start_time) / CLOCKS_PER_SEC) / 1000 * 8;
-    printf("Sent=%lu KB, Rate=%.3f Mbps", byte_num, speed);
+    printf("Sent=%lu KB, Rate=%.3f Mbps\n", byte_num, speed);
 //    close(client_socket_fd);
     return 0;
 
@@ -106,7 +106,7 @@ int server(int listen_port){
     send(server_socket_fd, acknow_message, strlen(acknow_message), MSG_NOSIGNAL);
     count /= 1000;
     double speed = count / ((double)(end_time - start_time) / CLOCKS_PER_SEC) / 1000 * 8;
-    printf("Received=%lu KB, Rate=%.3f Mbps", count, speed);
+    printf("Received=%lu KB, Rate=%.3f Mbps\n", count, speed);
 //    close(server_socket_fd);
     return 0;
 }
