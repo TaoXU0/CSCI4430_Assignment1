@@ -100,9 +100,7 @@ int server(int listen_port){
             end_time = clock();
             break;
         }
-        if(byte_recved == 1000){
-            count += byte_recved;
-        }
+        count += byte_recved;
     }
 
     // send acknowledgement message
