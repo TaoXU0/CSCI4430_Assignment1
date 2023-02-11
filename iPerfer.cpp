@@ -11,6 +11,7 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <time.h>
+#include <unistd.h>
 
 int client(char* hostname, int port, int time){
     int client_socket_fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -58,7 +59,7 @@ int client(char* hostname, int port, int time){
     byte_num /= 1000;
     double speed = byte_num / ((double)(finish_time - start_time) / CLOCKS_PER_SEC) / 1000 * 8;
     printf("Sent=%lu KB, Rate=%.3f Mbps\n", byte_num, speed);
-//    close(client_socket_fd);
+    close(client_socket_fd);
     return 0;
 
 
@@ -103,7 +104,7 @@ int server(int listen_port){
     count /= 1000;
     double speed = count / ((double)(end_time - start_time) / CLOCKS_PER_SEC) / 1000 * 8;
     printf("Received=%lu KB, Rate=%.3f Mbps\n", count, speed);
-//    close(server_socket_fd);
+    close(server_socket_fd);
     return 0;
 }
 
