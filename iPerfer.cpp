@@ -38,7 +38,10 @@ int client(char* hostname, int port, int time){
         if(((double)(finish_time - start_time) / CLOCKS_PER_SEC) >= double(time)) {
             break;
         }
-        send(client_socket_fd, &msg, strlen(msg), MSG_NOSIGNAL);
+        if(send(client_socket_fd, &msg, strlen(msg), MSG_NOSIGNAL) != 1000)
+        {
+            continue;
+        }
         printf("%lu\n",CLOCKS_PER_SEC);
         byte_num += strlen(msg);
     }
