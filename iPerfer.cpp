@@ -42,7 +42,6 @@ int client(char* hostname, int port, int time){
         {
             continue;
         }
-        printf("%lu\n",CLOCKS_PER_SEC);
         byte_num += strlen(msg);
     }
 
