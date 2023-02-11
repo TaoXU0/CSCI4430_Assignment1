@@ -102,7 +102,6 @@ int server(int listen_port){
         }
         if(byte_recved == 1000){
             count += byte_recved;
-            printf("%lu\n", count);
         }
     }
 
